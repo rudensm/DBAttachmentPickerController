@@ -140,6 +140,11 @@ const DBAttachmentMediaType DBAttachmentMediaTypeMaskAll = DBAttachmentMediaType
 
 #pragma mark - Public
 
+- (void)handleAssetArray:(NSArray *)assetArray
+{
+    [self finishPickingWithAttachmentArray:[self attachmentArrayFromPHAssetArray:assetArray]];
+}
+
 - (void)presentOnViewController:(UIViewController *)initialViewController {
     self.initialViewController = initialViewController;
     __weak typeof(self) weakSelf = self;
@@ -148,8 +153,7 @@ const DBAttachmentMediaType DBAttachmentMediaTypeMaskAll = DBAttachmentMediaType
                                                                             allowsMediaLibrary:( (self.mediaType & DBAttachmentMediaTypeImage) || (self.mediaType & DBAttachmentMediaTypeVideo) )
                                                                                allowsOtherApps:self.allowsSelectionFromOtherApps
                                                                                  attachHandler:^(NSArray<PHAsset *> *assetArray) {
-                                                                                     NSArray<DBAttachment *> *attachmentArray = [weakSelf attachmentArrayFromPHAssetArray:assetArray];
-                                                                                     [weakSelf finishPickingWithAttachmentArray:attachmentArray];
+                                                                                     [weakSelf handleAssetArray:assetArray];
                                                                                  } allAlbumsHandler:^(UIAlertAction *action) {
                                                                                      [weakSelf allAlbumsDidSelect];
                                                                                  } takePictureHandler:^(UIAlertAction *action) {
@@ -283,8 +287,11 @@ const DBAttachmentMediaType DBAttachmentMediaTypeMaskAll = DBAttachmentMediaType
 
 #pragma mark
 
-- (void)finishPickingWithAttachmentArray:(NSArray <DBAttachment *> *)attachmentArray {
-    self.extendedFinishPickingBlock(attachmentArray);
+- (void)finishPickingWithAttachmentArray:(NSArray <DBAttachment *> *)attachmentArray
+{
+    if (self.delegate) {
+        [self.delegate didFinishPickingWithAttachmentArray:attachmentArray];
+    }
 }
 
 - (void)cancelDidSelect {

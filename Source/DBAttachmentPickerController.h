@@ -32,6 +32,10 @@ UIKIT_EXTERN const DBAttachmentMediaType DBAttachmentMediaTypeMaskAll;
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol DBAttachmentPickerControllerDelegate
+- (void)didFinishPickingWithAttachmentArray:(NSArray *)attachmentArray;
+@end
+
 @class DBAttachment;
 
 typedef void (^FinishPickingBlock)(NSArray<DBAttachment *> * attachmentArray);
@@ -40,6 +44,8 @@ typedef void (^FinishVideoPickingBlock)(NSArray* resourceArray);
 typedef void (^CancelBlock)();
 
 @interface DBAttachmentPickerController : NSObject
+
+@property (weak, readwrite, nonatomic) id<DBAttachmentPickerControllerDelegate> delegate;
 
 /*!
  @brief Used to provide opportunity to correctly calculate position popover view when app works on iPad. You can specify UIButton, UITableViewCell, etc. instance to which the user touched.

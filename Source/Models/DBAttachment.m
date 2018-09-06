@@ -183,15 +183,16 @@
 - (void)loadOriginalImageWithCompletion:(void(^)(UIImage *resultImage))completion {
     switch (self.sourceType) {
         case DBAttachmentSourceTypePHAsset:
-            if (completion) {
-                [[PHImageManager defaultManager] requestImageForAsset:self.photoAsset
-                                                           targetSize:PHImageManagerMaximumSize
-                                                          contentMode:PHImageContentModeDefault
-                                                              options:nil
-                                                        resultHandler:^(UIImage *result, NSDictionary *info) {
-                                                            completion(result);
-                                                        }];
-            }
+            //if (completion) {
+            [[PHImageManager defaultManager] requestImageForAsset:self.photoAsset
+                                                       targetSize:PHImageManagerMaximumSize
+                                                      contentMode:PHImageContentModeDefault
+                                                          options:nil
+                                                    resultHandler:^(UIImage *result, NSDictionary *info) {
+                                                        NSLog(@"%@", info);
+                                                        //completion(result);
+                                                    }];
+            //}
             break;
         case DBAttachmentSourceTypeImage: {
             if (completion) {
